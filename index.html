@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>to-do-app</title>
+
+  <!-- =========================
+       ESTILOS (CSS)
+       ========================= -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      margin-top: 50px;
+    }
+
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 400px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    li {
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* =========================
+       PRIORIDADES (cores)
+       ========================= */
+
+    .alta {
+      background-color: #ff6b6b;
+    }
+
+    .media {
+      background-color: #ffd93d;
+    }
+
+    .baixa {
+      background-color: #6bcB77;
+    }
+
+    /* tarefa concluída */
+    .concluida {
+      text-decoration: line-through;
+      opacity: 0.6;
+    }
+
+    button.concluir {
+      width: auto;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>To-Do List</h1>
+
+    <!-- Campo de entrada -->
+    <input type="text" id="tarefaInput" placeholder="Digite uma tarefa">
+
+    <!-- Seletor de prioridade -->
+    <select id="prioridade">
+      <option value="alta">Alta</option>
+      <option value="media">Média</option>
+      <option value="baixa">Baixa</option>
+    </select>
+
+    <!-- Botão adicionar -->
+    <button onclick="adicionarTarefa()">Adicionar</button>
+
+    <!-- Lista -->
+    <ul id="listaTarefas"></ul>
+  </div>
+
+  <!-- =========================
+       JAVASCRIPT
+       ========================= -->
+  <script>
+
+    // Função principal: adiciona uma nova tarefa
+    function adicionarTarefa() {
+
+      // Pegando valores do input e do select
+      const input = document.getElementById("tarefaInput");
+      const prioridade = document.getElementById("prioridade").value;
+
+      const texto = input.value;
+
+      // Validação simples
+      if (texto === "") {
+        alert("Digite uma tarefa!");
+        return;
+      }
+
+      // Criando elementos HTML via JS
+      const li = document.createElement("li");
+      li.classList.add(prioridade); // aplica cor pela prioridade
+
+      const span = document.createElement("span");
+      span.textContent = texto;
+
+      const botao = document.createElement("button");
+      botao.textContent = "✔";
+      botao.classList.add("concluir");
+
+      // Evento de concluir tarefa
+      botao.onclick = function () {
+        li.classList.toggle("concluida");
+      };
+
+      // Montando estrutura
+      li.appendChild(span);
+      li.appendChild(botao);
+
+      document.getElementById("listaTarefas").appendChild(li);
+
+      // Limpando campo
+      input.value = "";
+    }
+
+  </script>
+
+</body>
+</html>
