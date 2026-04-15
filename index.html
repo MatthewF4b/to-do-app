@@ -71,8 +71,14 @@
       opacity: 0.6;
     }
 
-    button.concluir {
-      width: auto;
+    /* =========================
+       BOTÕES (MESMO TAMANHO)
+       ========================= */
+
+    button.concluir,
+    button.excluir {
+      width: 40px;
+      height: 40px;
       margin-left: 10px;
       cursor: pointer;
     }
@@ -124,23 +130,47 @@
 
       // Criando elementos HTML via JS
       const li = document.createElement("li");
-      li.classList.add(prioridade); // aplica cor pela prioridade
+      li.classList.add(prioridade);
 
       const span = document.createElement("span");
       span.textContent = texto;
+
+      // =========================
+      // BOTÃO CONCLUIR
+      // =========================
 
       const botao = document.createElement("button");
       botao.textContent = "✔";
       botao.classList.add("concluir");
 
-      // Evento de concluir tarefa
       botao.onclick = function () {
         li.classList.toggle("concluida");
       };
 
-      // Montando estrutura
+      // =========================
+      // BOTÃO EXCLUIR
+      // =========================
+
+      const botaoExcluir = document.createElement("button");
+      botaoExcluir.textContent = "❌";
+      botaoExcluir.classList.add("excluir");
+
+      botaoExcluir.onclick = function () {
+
+        const confirmar = confirm("Tem certeza que deseja excluir esta tarefa?");
+
+        if (confirmar) {
+          li.remove();
+        }
+      };
+
+      // =========================
+      // MONTAGEM
+      // =========================
+
       li.appendChild(span);
       li.appendChild(botao);
+      li.appendChild(botaoExcluir);
 
       document.getElementById("listaTarefas").appendChild(li);
 
