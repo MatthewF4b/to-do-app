@@ -1,184 +1,518 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>to-do-app</title>
+<meta charset="UTF-8">
+<title>to-do list</title>
 
-  <!-- =========================
-       ESTILOS (CSS)
-       ========================= -->
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      margin-top: 50px;
-    }
+<style>
 
-    .container {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      width: 400px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
+/* =========================
+   BASE
+========================= */
+body {
+  margin: 0;
+  font-family: Arial;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: white;
+}
 
-    h1 {
-      text-align: center;
-    }
+/* =========================
+   PARTICULAS
+========================= */
+#particles {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
 
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-    }
+/* =========================
+   CONTAINER
+========================= */
+.container {
+  width: 420px;
+  margin-top: 40px;
+  padding: 20px;
+  border-radius: 14px;
+  position: relative;
+  z-index: 2;
 
-    ul {
-      list-style: none;
-      padding: 0;
-      margin-top: 20px;
-    }
+  background: #0b1020;
+  border: 1px solid rgba(168, 85, 247, 0.6);
+  box-shadow: 0 0 25px rgba(168,85,247,0.4);
+}
 
-    li {
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+/* =========================
+   HEADER
+========================= */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-    /* =========================
-       PRIORIDADES (cores)
-       ========================= */
+h1 {
+  color: #a855f7;
+}
 
-    .alta {
-      background-color: #ff6b6b;
-    }
+.top-icons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
 
-    .media {
-      background-color: #ffd93d;
-    }
+.icon {
+  cursor: pointer;
+  font-size: 18px;
+}
 
-    .baixa {
-      background-color: #6bcB77;
-    }
+/* =========================
+   THEMES
+========================= */
+.themes {
+  display: flex;
+  gap: 5px;
+}
 
-    /* tarefa concluída */
-    .concluida {
-      text-decoration: line-through;
-      opacity: 0.6;
-    }
+.theme-box {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid white;
+}
 
-    /* =========================
-       BOTÕES (MESMO TAMANHO)
-       ========================= */
+.purple { background: #a855f7; }
+.black { background: #111; }
+.yellow { background: #facc15; }
 
-    button.concluir,
-    button.excluir {
-      width: 40px;
-      height: 40px;
-      margin-left: 10px;
-      cursor: pointer;
-    }
+/* =========================
+   INPUT
+========================= */
+.input-box {
+  display: flex;
+  gap: 5px;
+  margin-top: 15px;
+}
 
-  </style>
+.input-box input,
+.input-box select {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #020617;
+  color: white;
+}
+
+.add-btn {
+  background: #a855f7;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* =========================
+   TASK
+========================= */
+.task {
+  background: #020617;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  border-left: 5px solid;
+}
+
+/* PRIORIDADES RESTAURADAS */
+.alta { border-color: #ef4444; }
+.media { border-color: #facc15; }
+.baixa { border-color: #22c55e; }
+
+.actions button {
+  margin-left: 5px;
+  border: none;
+  cursor: pointer;
+  padding: 5px 8px;
+  border-radius: 6px;
+}
+
+.ok { background: #22c55e; }
+.del { background: #ef4444; }
+
+.done {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+/* =========================
+   PAGINAÇÃO
+========================= */
+.pagination {
+  display: none;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+/* =========================
+   FILTRO OVERLAY
+========================= */
+#filterOverlay {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  backdrop-filter: blur(8px);
+  background: rgba(0,0,0,0.6);
+  z-index: 10;
+  justify-content: center;
+  align-items: center;
+}
+
+.filterBox {
+  background: #0b1020;
+  padding: 20px;
+  border-radius: 12px;
+  width: 300px;
+  border: 1px solid rgba(168,85,247,0.5);
+}
+
+.filterBox select,
+.filterBox input {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #020617;
+  color: white;
+}
+
+/* =========================
+   PARTICLES VISUAL
+========================= */
+canvas {
+  mix-blend-mode: screen;
+}
+
+/* =========================
+   THEMES (UI)
+========================= */
+
+/* ROXO */
+body.theme-purple .container {
+  background: #0b1020;
+}
+body.theme-purple h1 {
+  color: #a855f7;
+}
+
+/* PRETO */
+body.theme-black {
+  background: black;
+}
+body.theme-black .container {
+  background: #000;
+  border: 1px solid white;
+  box-shadow: 0 0 20px white;
+}
+body.theme-black .task {
+  background: #111;
+  color: white;
+}
+body.theme-black h1 {
+  color: white;
+}
+
+/* AMARELO */
+body.theme-yellow .container {
+  border: 1px solid #facc15;
+}
+body.theme-yellow h1 {
+  color: #facc15;
+}
+body.theme-yellow .add-btn {
+  background: #facc15;
+  color: black;
+}
+
+</style>
 </head>
 
-<body>
+<body class="theme-purple">
 
-  <div class="container">
-    <h1>To-Do List</h1>
+<canvas id="particles"></canvas>
 
-    <!-- Campo de entrada -->
-    <input type="text" id="tarefaInput" placeholder="Digite uma tarefa">
+<div class="container">
 
-    <!-- Seletor de prioridade -->
-    <select id="prioridade">
+<div class="header">
+
+  <h1>To-Do</h1>
+
+  <div class="top-icons">
+
+    <div class="icon" onclick="openFilter()">⚙️</div>
+
+    <div class="themes">
+      <div class="theme-box purple" onclick="setTheme('purple')"></div>
+      <div class="theme-box black" onclick="setTheme('black')"></div>
+      <div class="theme-box yellow" onclick="setTheme('yellow')"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="input-box">
+
+  <input type="text" id="texto" placeholder="Nova tarefa...">
+
+  <select id="prioridade">
+    <option value="baixa">Baixa</option>
+    <option value="media">Média</option>
+    <option value="alta">Alta</option>
+  </select>
+
+  <button class="add-btn" onclick="add()">+</button>
+
+</div>
+
+<ul id="lista"></ul>
+
+<div class="pagination" id="pagination">
+  <button onclick="prev()">◀</button>
+  <span id="page"></span>
+  <button onclick="next()">▶</button>
+</div>
+
+</div>
+
+<!-- FILTER -->
+<div id="filterOverlay" onclick="closeFilter(event)">
+  <div class="filterBox" onclick="event.stopPropagation()">
+
+    <h3>Filtros</h3>
+
+    <select id="filtroPrioridade">
+      <option value="">Todas prioridades</option>
       <option value="alta">Alta</option>
       <option value="media">Média</option>
       <option value="baixa">Baixa</option>
     </select>
 
-    <!-- Botão adicionar -->
-    <button onclick="adicionarTarefa()">Adicionar</button>
+    <input type="date" id="filtroData">
+    <input type="text" id="filtroTexto" placeholder="Palavra-chave">
 
-    <!-- Lista -->
-    <ul id="listaTarefas"></ul>
+    <button onclick="applyFilter()">Aplicar</button>
+
   </div>
+</div>
 
-  <!-- =========================
-       JAVASCRIPT
-       ========================= -->
-  <script>
+<script>
 
-    // Função principal: adiciona uma nova tarefa
-    function adicionarTarefa() {
+/* =========================
+   THEME FIX (CORRETO)
+========================= */
+function setTheme(theme) {
+  document.body.classList.remove("theme-purple", "theme-black", "theme-yellow");
+  document.body.classList.add("theme-" + theme);
 
-      // Pegando valores do input e do select
-      const input = document.getElementById("tarefaInput");
-      const prioridade = document.getElementById("prioridade").value;
+  updateColor();
+}
 
-      const texto = input.value;
+/* =========================
+   PARTICLES
+========================= */
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
 
-      // Validação simples
-      if (texto === "") {
-        alert("Digite uma tarefa!");
-        return;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let color = "168,85,247";
+
+function updateColor() {
+  if (document.body.classList.contains("theme-black")) {
+    color = "255,255,255";
+  } else if (document.body.classList.contains("theme-yellow")) {
+    color = "250,204,21";
+  } else {
+    color = "168,85,247";
+  }
+}
+
+let dots = [];
+
+for (let i = 0; i < 60; i++) {
+  dots.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 2,
+    dx: (Math.random() - 0.5),
+    dy: (Math.random() - 0.5)
+  });
+}
+
+function animate() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  updateColor();
+
+  for (let d of dots) {
+    ctx.beginPath();
+    ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+    ctx.fillStyle = `rgba(${color},0.6)`;
+    ctx.fill();
+
+    d.x += d.dx;
+    d.y += d.dy;
+  }
+
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* =========================
+   DATA
+========================= */
+let tarefas = JSON.parse(localStorage.getItem("tarefas")) || [];
+let filtradas = [...tarefas];
+
+let pagina = 1;
+const limite = 5;
+
+/* =========================
+   FILTER
+========================= */
+function openFilter() {
+  document.getElementById("filterOverlay").style.display = "flex";
+}
+
+function closeFilter(e) {
+  document.getElementById("filterOverlay").style.display = "none";
+}
+
+function applyFilter() {
+  const p = document.getElementById("filtroPrioridade").value;
+  const d = document.getElementById("filtroData").value;
+  const t = document.getElementById("filtroTexto").value.toLowerCase();
+
+  filtradas = tarefas.filter(x =>
+    (!p || x.prioridade === p) &&
+    (!d || x.data === d) &&
+    (!t || x.texto.toLowerCase().includes(t))
+  );
+
+  pagina = 1;
+  render();
+}
+
+/* =========================
+   CRUD
+========================= */
+function save() {
+  localStorage.setItem("tarefas", JSON.stringify(tarefas));
+}
+
+function add() {
+  const texto = document.getElementById("texto").value;
+  const prioridade = document.getElementById("prioridade").value;
+
+  if (!texto) return;
+
+  tarefas.push({
+    id: Date.now(),
+    texto,
+    prioridade,
+    data: new Date().toISOString().split("T")[0]
+  });
+
+  save();
+  render();
+}
+
+/* =========================
+   RENDER
+========================= */
+function render() {
+  const lista = document.getElementById("lista");
+  lista.innerHTML = "";
+
+  const start = (pagina - 1) * limite;
+  const end = start + limite;
+
+  filtradas.slice(start,end).forEach(t => {
+
+    const li = document.createElement("li");
+    li.classList.add("task", t.prioridade);
+
+    const top = document.createElement("div");
+    top.style.display = "flex";
+    top.style.justifyContent = "space-between";
+
+    const span = document.createElement("span");
+    span.textContent = t.texto;
+
+    const actions = document.createElement("div");
+
+    const ok = document.createElement("button");
+    ok.textContent = "✔";
+    ok.classList.add("ok");
+    ok.onclick = () => li.classList.toggle("done");
+
+    const del = document.createElement("button");
+    del.textContent = "✖";
+    del.classList.add("del");
+
+    del.onclick = () => {
+      if (confirm("Tem certeza?")) {
+        tarefas = tarefas.filter(x => x.id !== t.id);
+        save();
+        render();
       }
+    };
 
-      // Criando elementos HTML via JS
-      const li = document.createElement("li");
-      li.classList.add(prioridade);
+    actions.appendChild(ok);
+    actions.appendChild(del);
 
-      const span = document.createElement("span");
-      span.textContent = texto;
+    top.appendChild(span);
+    top.appendChild(actions);
 
-      // =========================
-      // BOTÃO CONCLUIR
-      // =========================
+    li.appendChild(top);
+    lista.appendChild(li);
+  });
 
-      const botao = document.createElement("button");
-      botao.textContent = "✔";
-      botao.classList.add("concluir");
+  document.getElementById("page").textContent =
+    `${pagina} / ${Math.ceil(filtradas.length/limite)||1}`;
 
-      botao.onclick = function () {
-        li.classList.toggle("concluida");
-      };
+  document.getElementById("pagination").style.display =
+    filtradas.length > limite ? "flex" : "none";
+}
 
-      // =========================
-      // BOTÃO EXCLUIR
-      // =========================
+/* =========================
+   PAGINAÇÃO
+========================= */
+function next() {
+  if (pagina * limite < filtradas.length) {
+    pagina++;
+    render();
+  }
+}
 
-      const botaoExcluir = document.createElement("button");
-      botaoExcluir.textContent = "❌";
-      botaoExcluir.classList.add("excluir");
+function prev() {
+  if (pagina > 1) {
+    pagina--;
+    render();
+  }
+}
 
-      botaoExcluir.onclick = function () {
+render();
 
-        const confirmar = confirm("Tem certeza que deseja excluir esta tarefa?");
-
-        if (confirmar) {
-          li.remove();
-        }
-      };
-
-      // =========================
-      // MONTAGEM
-      // =========================
-
-      li.appendChild(span);
-      li.appendChild(botao);
-      li.appendChild(botaoExcluir);
-
-      document.getElementById("listaTarefas").appendChild(li);
-
-      // Limpando campo
-      input.value = "";
-    }
-
-  </script>
+</script>
 
 </body>
 </html>
