@@ -19,4 +19,5 @@ Essa página contém uma to-do list com alguns critérios, sendo eles:
 8 - Depois da confirmação de exclusão de uma tarefa, não há como resgatá-la.
   
 9 - A funcionalidade de filtro possibilita a busca por data, prioridade e/ou palavra-chave.
-  
+
+10 - Para garantir a customização do usuário, existem 3 opções de cores para mudar de acordo com o gosto pessoal.
